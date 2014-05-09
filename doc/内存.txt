@@ -1,0 +1,27 @@
+Liunx
+===============================================
+Terms
+VSS - Virtual Set Size 虚拟耗用内存（包含共享库占用的内存）
+RSS - Resident Set Size 实际使用物理内存（包含共享库占用的内存）
+PSS - Proportional Set Size 实际使用的物理内存（比例分配共享库占用的内存）
+USS - Unique Set Size 进程独自占用的物理内存（不包含共享库占用的内存）
+一般来说内存占用大小有如下规律：VSS >= RSS >= PSS >= USS
+USS is the total private memory for a process, i.e. that memory that is completely unique to that process.
+USS is an extremely useful number because it indicates the true incremental cost of running a particular process. 
+When a process is killed, the USS is the total memory that is actually returned to the system. 
+USS is the best number to watch when initially suspicious of memory leaks in a process.
+
+cat /proc/meminfo
+MemTotal: 16344972 kB
+MemFree: 13634064 kB
+Buffers: 3656 kB
+Cached: 1195708 kB
+我们查看机器内存时，会发现MemFree的值很小。这主要是因为，在linux中有这么一种思想，内存不用白不用，因此它尽可能的cache和buffer一些数据，
+以方便下次使用。但实际上这些内存也是可以立刻拿来使用的。
+所以 空闲内存=free+buffers+cached=total-used
+
+top
+procrank
+ps
+
+MemoryInfo[] memoryInfoArray = am.getProcessMemoryInfo(pids);
